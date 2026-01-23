@@ -263,6 +263,7 @@
         <div class="container">
             <h2 class="section-title">Contacto</h2>
             <div class="contact-content">
+                <!-- Información de contacto -->
                 <div class="contact-info">
                     <div class="contact-card">
                         <h3>Información de Contacto</h3>
@@ -275,10 +276,10 @@
                         </div>
                         <!-- <div class="contact-item-detail">
                             <i class="fas fa-phone"></i>
-                            < <div>
+                            <div>
                                 <strong>Teléfono</strong>
                                 <p>2352 506499</p>
-                            </div> 
+                            </div>
                         </div> -->
                         <div class="contact-item-detail">
                             <i class="fas fa-map-marker-alt"></i>
@@ -287,6 +288,20 @@
                                 <p>Argentina</p>
                             </div>
                         </div>
+                        <!-- <div class="contact-item-detail">
+                            <i class="fab fa-linkedin"></i>
+                            <div>
+                                <strong>LinkedIn</strong>
+                                <p>linkedin.com/in/agustin-camera-a0258221a</p>
+                            </div>
+                        </div> -->
+                        <!-- <div class="contact-item-detail">
+                            <i class="fab fa-github"></i>
+                            <div>
+                                <strong>GitHub</strong>
+                                <p>github.com/Agustil8</p>
+                            </div>
+                        </div> -->
                     </div>
 
                     <div class="contact-card">
@@ -294,36 +309,144 @@
                         <p>Actualmente estoy buscando oportunidades laborales, prácticas profesionales o proyectos
                             freelance donde pueda aplicar mis conocimientos en desarrollo web y seguir creciendo
                             profesionalmente en el sector IT.</p>
+                        <p style="margin-top: 15px;"><strong>Respuesta rápida:</strong> Normalmente respondo en menos de
+                            24 horas.</p>
                     </div>
                 </div>
 
+                <!-- Formulario de contacto -->
                 <div class="contact-form">
                     <h3>Envíame un Mensaje</h3>
-                    <form id="contactForm" action="https://formspree.io/f/mqepllye" method="POST">
+                    <form id="contactForm">
                         <div class="form-group">
                             <label for="name">Nombre</label>
-                            <input type="text" id="name" class="form-control" required>
+                            <input type="text" id="name" name="name" class="form-control" required
+                                placeholder="Tu nombre completo">
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" id="email" class="form-control" required>
+                            <input type="email" id="email" name="email" class="form-control" required
+                                placeholder="tu@email.com">
                         </div>
                         <div class="form-group">
                             <label for="subject">Asunto</label>
-                            <input type="text" id="subject" class="form-control" required>
+                            <input type="text" id="subject" name="subject" class="form-control" required
+                                placeholder="Ej: Oportunidad laboral, Consulta, Colaboración">
                         </div>
                         <div class="form-group">
                             <label for="message">Mensaje</label>
-                            <textarea id="message" class="form-control" required></textarea>
+                            <textarea id="message" name="message" class="form-control" required
+                                placeholder="Escribe tu mensaje aquí..." rows="5"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
                             <i class="fas fa-paper-plane"></i> Enviar Mensaje
                         </button>
+                        <p style="font-size: 0.85rem; color: var(--secondary); margin-top: 20px;">
+                            <i class="fas fa-shield-alt"></i> Tu información será usada solo para responder tu mensaje.
+                        </p>
                     </form>
                 </div>
             </div>
         </div>
     </section>
+
+    <script>
+        // Configuración del formulario de contacto
+        function configurarFormularioContacto() {
+            const form = document.getElementById('contactForm');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (!form) return;
+
+            form.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                // Guardar texto original del botón
+                const originalText = submitBtn.innerHTML;
+                const originalWidth = submitBtn.offsetWidth;
+
+                // Mostrar estado de carga
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                submitBtn.disabled = true;
+                submitBtn.style.width = originalWidth + 'px';
+
+                try {
+                    // REEMPLAZA ESTA URL CON TU URL DE FORMSPREE
+                    const formspreeURL = "https://formspree.io/f/mqepllye";
+
+                    // Crear objeto con los datos del formulario
+                    const formData = {
+                        name: document.getElementById('name').value.trim(),
+                        email: document.getElementById('email').value.trim(),
+                        subject: document.getElementById('subject').value.trim(),
+                        message: document.getElementById('message').value.trim(),
+                        _subject: `Nuevo mensaje CV: ${document.getElementById('subject').value.trim()}`,
+                        _replyto: document.getElementById('email').value.trim()
+                    };
+
+                    // Enviar a Formspree
+                    const response = await fetch(formspreeURL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    if (response.ok) {
+                        // Éxito
+                        alert('¡Mensaje enviado con éxito! 🎉\nTe responderé a ' + formData.email + ' en breve.');
+
+                        // Limpiar formulario
+                        form.reset();
+
+                        // Mostrar mensaje de éxito en el botón
+                        submitBtn.innerHTML = '<i class="fas fa-check"></i> ¡Enviado!';
+                        submitBtn.style.backgroundColor = 'var(--success)';
+
+                        // Restaurar después de 3 segundos
+                        setTimeout(() => {
+                            submitBtn.innerHTML = originalText;
+                            submitBtn.disabled = false;
+                            submitBtn.style.backgroundColor = '';
+                            submitBtn.style.width = '';
+                        }, 3000);
+
+                    } else {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+
+                } catch (error) {
+                    console.error('Error al enviar formulario:', error);
+
+                    // Mostrar error
+                    submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error';
+                    submitBtn.style.backgroundColor = '#dc3545';
+
+                    alert('❌ Hubo un error al enviar el mensaje.\n\nPuedes contactarme directamente por:\n📧 agustincameral6@hotmail.com\n📱 2352 506499');
+
+                    // Restaurar después de 3 segundos
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                        submitBtn.style.backgroundColor = '';
+                        submitBtn.style.width = '';
+                    }, 3000);
+                }
+            });
+        }
+
+        // Inicializar cuando cargue la página
+        document.addEventListener('DOMContentLoaded', function () {
+            configurarFormularioContacto();
+        });
+    </script>
+
+
+
+
+
 
     <!-- Footer -->
     <footer>
@@ -481,32 +604,7 @@
             alert("En un entorno real, aquí se descargaría el archivo PDF. Para esta demo, puedes guardar esta página web como PDF o imagen.");
         }
 
-        // Manejo del formulario de contacto
-        // function manejarFormularioContacto() {
-        //     const contactForm = document.getElementById('contactForm');
-
-        //     contactForm.addEventListener('submit', function (e) {
-        //         e.preventDefault();
-
-        //         // Obtener valores del formulario
-        //         const name = document.getElementById('name').value;
-        //         const email = document.getElementById('email').value;
-        //         const subject = document.getElementById('subject').value;
-        //         const message = document.getElementById('message').value;
-
-        //         // Validación básica
-        //         if (name && email && subject && message) {
-        //             // Simular envío del formulario
-        //             alert(`¡Gracias ${name}! Tu mensaje ha sido enviado. Te responderé a ${email} pronto.`);
-
-        //             // Limpiar formulario
-        //             contactForm.reset();
-        //         } else {
-        //             alert('Por favor, completa todos los campos del formulario.');
-        //         }
-        //     });
-        // }
-
+        
         // Navegación suave
         function configurarNavegacion() {
             const navLinks = document.querySelectorAll('.nav-links a');
