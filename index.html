@@ -482,30 +482,30 @@
         }
 
         // Manejo del formulario de contacto
-        function manejarFormularioContacto() {
-            const contactForm = document.getElementById('contactForm');
+        // function manejarFormularioContacto() {
+        //     const contactForm = document.getElementById('contactForm');
 
-            contactForm.addEventListener('submit', function (e) {
-                e.preventDefault();
+        //     contactForm.addEventListener('submit', function (e) {
+        //         e.preventDefault();
 
-                // Obtener valores del formulario
-                const name = document.getElementById('name').value;
-                const email = document.getElementById('email').value;
-                const subject = document.getElementById('subject').value;
-                const message = document.getElementById('message').value;
+        //         // Obtener valores del formulario
+        //         const name = document.getElementById('name').value;
+        //         const email = document.getElementById('email').value;
+        //         const subject = document.getElementById('subject').value;
+        //         const message = document.getElementById('message').value;
 
-                // Validación básica
-                if (name && email && subject && message) {
-                    // Simular envío del formulario
-                    alert(`¡Gracias ${name}! Tu mensaje ha sido enviado. Te responderé a ${email} pronto.`);
+        //         // Validación básica
+        //         if (name && email && subject && message) {
+        //             // Simular envío del formulario
+        //             alert(`¡Gracias ${name}! Tu mensaje ha sido enviado. Te responderé a ${email} pronto.`);
 
-                    // Limpiar formulario
-                    contactForm.reset();
-                } else {
-                    alert('Por favor, completa todos los campos del formulario.');
-                }
-            });
-        }
+        //             // Limpiar formulario
+        //             contactForm.reset();
+        //         } else {
+        //             alert('Por favor, completa todos los campos del formulario.');
+        //         }
+        //     });
+        // }
 
         // Navegación suave
         function configurarNavegacion() {
@@ -603,7 +603,7 @@
             configurarNavegacion();
             configurarMenuMovil();
             configurarEventos();
-            manejarFormularioContacto();
+            // manejarFormularioContacto();
 
             // Configurar observador para animaciones al hacer scroll
             setTimeout(configurarObservador, 500);
